@@ -16,19 +16,67 @@ The app will then retrieve the data from every available machine:port/metrics
 endpoint and port them to a preset list of ports.
 
 Usage: python3 JMXMarathonDataAggregator.py <marathonurl> <appid> \
-    <initialport> <totalports> <list_of_ports>
+    <initialport> <totalports>
+    OR
+Usage: python3 JMXMarathonDataAggregator.py <marathonurl> \
+    <appid> <list_of_ports>
 
 marathonurl:   Full URL of marathon instance whose API will be queried
 appid:         Full Appid to use within the REST Api calls
 initialport:   Which port to start with (ex. 4010, 4011, 40<totalports>)
 totalports:    Total number of ports to expose
-list_of_ports: Python list with exact ports to expose
+# TODO - list_of_ports: comma seperated list with exact ports to expose
 
-Can also be read from a JMXAggregator.properties file.
+# TODO - Can also be read from a JMXAggregator.properties file.
 
 The License for this application is located at the bottom of the file.
 """
 
+import sys # Command line arguments
+
+# EXISTS ONLY FOR TESTING PURPOSES #
+sys.argv = ["http://dummy-marathon-url:8080", "/apps/test/id", 40, 4100]
+#sys.argv = ["http://dummy-marathon-url:8080", "/apps/test/id", "[4010, 4011]"]
+# END TESTING AREA #
+
+def usageCheck():
+    """ Run at the start of the application for verify structure """
+    if len(sys.argv) != 3 and len(sys.argv) != 4:
+        print("Usage: python3 JMXMarathonDataAggregator.py <marathonurl> " +
+              "<appid> <initialport> <totalports> <optional_list_of_ports>")
+        print("OR: python3 JMXMarathonDataAggregator.py <marathonurl> " +
+              "<appid> <list_of_ports>")
+        exit(1);
+
+class CommandLineArguments:
+    """ Command line arguments object for easy reading """
+    
+    def __init__(self):
+        """ Constructor builds the whole object """
+        self.marathonURL = sys.argv[0]
+        self.appid = sys.argv[1]
+        if len(sys.argv) == 3: # If portlist was input
+            self.portlist = sys.argv[2]
+        elif len(sys.argv) == 4: # If starting and total ports was input
+            self.startingport = sys.argv[2]
+            self.totalports = sys.argv[3]
+
+    def __str__(self):
+        """ Python toString command for easy debugging """
+        if len(sys.argv) == 3:
+            return "CLA obj [" + self.marathonURL + ", " + \
+                self.appid + ", " + self.portlist + "]"
+        elif len(sys.argv) == 4:
+            return "CLA obj [" + self.marathonURL + ", " + \
+                self.appid + ", " + self.startingport + ", " + \
+                self.totalports + "]"
+
+class MarathonRestService:
+    """ Contains reusable rest calls """
+
+# ------------------ Actual execution below ------------------
+usageCheck() # Verify that the correct inputs were entered
+inputArgs = CommandLineArguments() # Retrieve command line arguments
 
 
 """ LICENSE BELOW
