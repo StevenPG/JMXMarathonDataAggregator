@@ -152,7 +152,7 @@ class ServerHandler:
         index = 0
         for port in range(startingPort, endingPort):
             try:
-                httpd = MarathonRedirectTCPServer(("localhost", port),
+                httpd = MarathonRedirectTCPServer(("0.0.0.0", port),
                                               MarathonRedirectTCPHandler, api_url=self.marathon_service.endpointList[index])
                 self.threadList.append(Thread(target=httpd.serve_forever))
                 index = index + 1 # Iterate endpoint index
