@@ -36,7 +36,7 @@ The License for this application is located at the bottom of the file.
 """
 
 import sys                        # Command line arguments
-import requests                   # REST calls to Marathon
+import urllib.request             # REST calls to Marathon
 import json                       # Parse Marathon JSON Response
 import http.server                # HTTP server to listen for requests
 import socketserver               # Socket to handle incoming requests
@@ -96,8 +96,8 @@ class MarathonRestService:
         self.APISTR = "/v2/apps/"
         self.APP_REQ = (self.URL + self.APISTR + self.ID).replace("//", "/").replace("http:/", "http://")
         
-        response = requests.get(self.APP_REQ)
-        response_as_json = json.loads(response.text)
+        response = urllib.request.urlopen(self.APP_REQ)
+        response_as_json = json.loads(response.read().decode('utf-8'))
         self.totalScaledInstances = response_as_json['app']['instances']
         self.fullEndpointList = response_as_json['app']['tasks']
         
@@ -118,8 +118,11 @@ class MarathonRedirectTCPHandler(socketserver.BaseRequestHandler):
     """ Makes a metrics request and forwards to preset ports through the application"""
     
     def handle(self):
+        # Make a request to the api_url metrics and fwd to page
+        encoded_response = urllib.request.urlopen("http://" + self.server.api_url + "/metrics")
+        
         # self.request is the TCP socket connected to the client
-        self.request.sendall(str(self.server.api_url).encode())
+        self.request.sendall(encoded_response.read())
         
 class ServerHandler:
     """ Handles spinning up multiple socker servers on httpserver to listen for requests """
@@ -154,7 +157,8 @@ class ServerHandler:
                 self.threadList.append(Thread(target=httpd.serve_forever))
                 index = index + 1 # Iterate endpoint index
             except IndexError:
-                print("Attempted to create thread with no endpoint mapping.\n Creation Failed")
+                print("Attempted to create thread with no endpoint mapping.\n Thread " + str(index+1) + " creation denied.")
+                index = index + 1
 
     def startSocketServers(self):
         """ Start and subsequently join the socket servers """
