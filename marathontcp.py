@@ -11,6 +11,7 @@ to the TCP servers running from this application.
 
 # Official Imports
 import socketserver
+import urllib.request
 
 class MarathonRedirectTCPServer(socketserver.TCPServer):
     """ TCP Server that takes special extra arguments if needed """
