@@ -22,21 +22,15 @@ class ServerHandler:
     def __init__(self, inputArgs, marathon_service):
         """ Takes a CommandLineArguments object as input """
         self.inputArgs = inputArgs # Save CLA internally
+        self.startingport = 4000 # Set default port
         self.marathon_service = marathon_service # get marathon data values
-        if inputArgs.totalArgs == 3:
-            self.__buildUsingPortlist()
-        else: # 4 CLA means use starting and total ports
-            self.__buildUsingValues()
+        self.__buildUsingValues()
         self.Handler = http.server.SimpleHTTPRequestHandler
-
-    def __buildUsingPortlist(self):
-        """ Build the servers using the portlist """
-        pass
 
     def __buildUsingValues(self):
         """ Build using individual values """
-        startingPort = self.inputArgs.startingport
-        endingPort = startingPort + self.inputArgs.totalports
+        startingPort = self.startingport
+        endingPort = startingPort + int(self.inputArgs.totalports)
 
         self.threadList = []
 

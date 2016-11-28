@@ -16,21 +16,11 @@ The REST Api is then queried and the actual machinename:port is retrieved.
 The app will then retrieve the data from every available machine:port/metrics
 endpoint and port them to a preset list of ports.
 
-Usage: python3 JMXMarathonDataAggregator.py <marathonurl> <appid> \
-    <initialport> <totalScaledInstances>
-    OR
-Usage: python3 JMXMarathonDataAggregator.py <marathonurl> \
-    <appid> <list_of_ports>
+Usage: python3 jmxmarathondataaggregator.py <marathonurl> <appid> <totalScaledInstances>
 
 marathonurl:             Full URL of marathon instance whose API will be queried
 appid:                   Full Appid to use within the REST Api calls
-initialport:             Which port to start with (ex. 4010, 4011, 40<totalports>)
 totalScaledInstances:    Total number of ports to expose based on max number of scaled instances
-# TODO - list_of_ports: comma seperated list with exact ports to expose
-# TODO - figure out how to handle multiple ports inside each container - For now use first one in portlist
-# TODO - Can also be read from a JMXAggregator.properties file.
-# TODO - Crack into smaller individual modules
-# TODO - Add refresh rate
 
 The License for this application is located at the bottom of the file.
 """
@@ -42,10 +32,8 @@ from commandlineargumentshandler import CommandLineArgumentsHandler
 from marathonrestservice import MarathonRestService
 from serverhandler import ServerHandler
 
-# EXISTS ONLY FOR TESTING PURPOSES #
-sys.argv = ["http://wchvilsgrid03.qvcdev.qvc.net:8080/", "/apps/enableit/portal/enableportal-dev", 4010, 5]
-#sys.argv = ["http://wchvilsgrid03.qvcdev.qvc.net:8080/", "/apps/enableit/portal/enableportal-dev", "[4010, 4011]"]
-# END TESTING AREA #
+# Example arguments:
+# http://wchvilsgrid03.qvcdev.qvc.net:8080/ /apps/enableit/portal/enableportal-dev 5
 
 def usageCheck():
     """ Run at the start of the application for verify structure """
@@ -55,15 +43,12 @@ def usageCheck():
         sys.exit(1)
 
     # Verify command line arguments
-    if len(sys.argv) != 3 and len(sys.argv) != 4:
-        print("Usage: python3 JMXMarathonDataAggregator.py <marathonurl> " +
-              "<appid> <initialport> <totalports>")
-        print("OR: python3 JMXMarathonDataAggregator.py <marathonurl> " +
-              "<appid> <list_of_ports>")
+    if len(sys.argv) != 4:
+        print("Usage: python3 jmxmarathondataaggregator.py <marathonurl> <appid> <totalScaledInstances>")
         exit(1);
 
 usageCheck()                                                         # Verify correct inputs entered
-inputArgs = CommandLineArgumentsHandler(sys.argv)                           # Retrieve command line arguments
+inputArgs = CommandLineArgumentsHandler(sys.argv)                    # Retrieve command line arguments
 client = MarathonRestService(inputArgs.marathonURL, inputArgs.appid) # build marathon service
 server = ServerHandler(inputArgs, client)                            # build initial server handler
 server.startSocketServers()                                          # Kick off socket servers

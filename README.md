@@ -2,25 +2,19 @@
 
 This script was designed to be used with Marathon, Prometheus,
 and the JMXExporter project to allow Prometheus to retrieve data
-from multiple instances of a container created through Marathon.
+from multiple instances of a java container created through Marathon.
 
 Prometheus is unable to view each of these individual instances when
-they are hidden behind a proxy and/or load balancer.
+they are hidden behind a proxy and/or load balancer. The only data that
+is passed depends on which container Prometheus hits when making a request.
 
 This application can be run from any location, and is given a Marathon url.
 The REST Api is then queried and the actual machinename:port is retrieved.
 The app will then retrieve the data from every available machine:port/metrics
 endpoint and port them to a preset list of ports.
 
-Usage: python3 JMXMarathonDataAggregator.py <marathonurl> <appid> \
-    <initialport> <totalports> <list_of_ports>
+Usage: python3 jmxmarathondataaggregator.py <marathonurl> <appid> <totalScaledInstances>
 
-marathonurl:   Full URL of marathon instance whose API will be queried
-appid:         Full Appid to use within the REST Api calls
-initialport:   Which port to start with (ex. 4010, 4011, 40<totalports>)
-totalports:    Total number of ports to expose
-list_of_ports: Python list with exact ports to expose
-
-Can also be read from a JMXAggregator.properties file.
-
-#TODO ADD LINKS TO RELEVANT PROJECTS
+marathonurl:             Full URL of marathon instance whose API will be queried
+appid:                   Full Appid to use within the REST Api calls
+totalScaledInstances:    Total number of ports to expose based on max number of scaled instances
