@@ -15,8 +15,10 @@ The REST Api is then queried and the actual machinename:port is retrieved.
 The app will then retrieve the data from every available machine:port/metrics
 endpoint and port them to a preset list of ports.
 
-Usage: python3 jmxmarathondataaggregator.py <marathonurl> <appid> <totalScaledInstances>
+    Usage: python3 jmxmarathondataaggregator.py <marathonurl> <appid> <totalScaledInstances>
 
 marathonurl:             Full URL of marathon instance whose API will be queried
+
 appid:                   Full Appid to use within the REST Api calls
+
 totalScaledInstances:    Total number of ports to expose based on max number of scaled instances
