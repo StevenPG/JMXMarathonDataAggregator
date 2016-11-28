@@ -1,8 +1,10 @@
-#JMXMarathonDataExporter
+# JMXMarathonDataExporter
 
-This script was designed to be used with Marathon, Prometheus,
-and the JMXExporter project to allow Prometheus to retrieve data
-from multiple instances of a java container created through Marathon.
+This script was designed to be used with [Marathon](https://mesosphere.github.io/marathon/),
+[Prometheus](https://prometheus.io/),
+and the [JMXExporter](https://github.com/prometheus/jmx_exporter) project to 
+allow Prometheus to retrieve data from multiple instances of a container 
+created through Marathon.
 
 Prometheus is unable to view each of these individual instances when
 they are hidden behind a proxy and/or load balancer. The only data that
