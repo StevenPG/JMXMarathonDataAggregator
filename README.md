@@ -22,3 +22,14 @@ marathonurl:             Full URL of marathon instance whose API will be queried
 appid:                   Full Appid to use within the REST Api calls
 
 totalScaledInstances:    Total number of ports to expose based on max number of scaled instances
+
+## Containerization
+
+There's an image located in this project's docker registry. 
+
+The application is designed to auto-expose on port 4000 -> n, where n is 4000 + totalScaledInstances.
+
+The run command is as follows: 
+    docker run -p 4000:4000 -p 4001:4001 -p 4002:4002 -p 4003:4003 -p 4004:4004 -i -d <image>:<tag> <marathonurl> <appid> <totalScaledInstances>
+    
+You'll need to open ports equal to the total number of scaled instances.
