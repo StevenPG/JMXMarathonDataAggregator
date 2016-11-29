@@ -46,6 +46,7 @@ def usageCheck():
     if len(sys.argv) != 4:
         print("Usage: python3 jmxmarathondataaggregator.py <marathonurl> <appid> <totalScaledInstances>")
         exit(1);
+    print("Arguments verified... Initializing...")
 
 usageCheck()                                                         # Verify correct inputs entered
 inputArgs = CommandLineArgumentsHandler(sys.argv)                    # Retrieve command line arguments
