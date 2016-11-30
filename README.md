@@ -34,3 +34,7 @@ The run command is as follows:
     docker run -p 4000:4000 -p 4001:4001 -p 4002:4002 -p 4003:4003 -p 4004:4004 -i -d <image>:<tag> <marathonurl> <appid> <totalScaledInstances>
     
 You'll need to open ports equal to the total number of scaled instances.
+
+## TODO
+- Hold old data in memory to avoid having to wait for retrieval
+- Pretty print JSON so endpoints are readable
