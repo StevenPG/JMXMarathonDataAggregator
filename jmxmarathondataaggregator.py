@@ -32,9 +32,6 @@ from commandlineargumentshandler import CommandLineArgumentsHandler
 from marathonrestservice import MarathonRestService
 from serverhandler import ServerHandler
 
-# Example arguments:
-# http://wchvilsgrid03.qvcdev.qvc.net:8080/ /apps/enableit/portal/enableportal-dev 5
-
 def usageCheck():
     """ Run at the start of the application for verify structure """
     # Check python version 3 is being used
