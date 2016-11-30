@@ -30,5 +30,5 @@ class MarathonRestService:
         # NOTE, CURRENTLY THE FIRST PORT IS CHOSEN AS THE JAVA EXPOSED PORT
         self.endpointList = []
         for endpoint in list(self.fullEndpointList):
-            self.endpointList.append(endpoint['host'] + ":" + str(endpoint['ports'][1]))    
+            self.endpointList.append(endpoint['host'] + ":" + str(endpoint['ports'][0]))    
 
