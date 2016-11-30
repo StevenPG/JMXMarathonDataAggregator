@@ -1,14 +1,17 @@
 FROM python:3
 MAINTAINER Steven Gantz
 
-RUN curl -o /JMXMarathonDataAggregator.py https://gitlab.com/StevenPG/JMXMarathonDataAggregator/raw/master/JMXMarathonDataAggregator.py
+#Download necessary files
+RUN curl -o /jmxmarathondataaggregator.py https://gitlab.com/StevenPG/JMXMarathonDataAggregator/raw/master/jmxmarathondataaggregator.py
+RUN curl -o /commandlineargumentshandler.py https://gitlab.com/StevenPG/JMXMarathonDataAggregator/raw/master/commandlineargumentshandler.py
+RUN curl -o /marathonrestservice.py https://gitlab.com/StevenPG/JMXMarathonDataAggregator/raw/master/marathonrestservice.py
+RUN curl -o /marathontcp.py https://gitlab.com/StevenPG/JMXMarathonDataAggregator/raw/master/marathontcp.py
+RUN curl -o /serverhandler.py https://gitlab.com/StevenPG/JMXMarathonDataAggregator/raw/master/serverhandler.py
 
-RUN ls -la /
+RUN chmod 777 *.py
 
-EXPOSE 4010
-EXPOSE 4011
-EXPOSE 4012
-EXPOSE 4013
-EXPOSE 4014
+ENV MARATHON_URL=default
+ENV APP_ID=default
+ENV MAX_SCALED_INSTANCES=default
 
-CMD [ "python", "./JMXMarathonDataAggregator.py", "http://wchvilsgrid03.qvcdev.qvc.net:8080/", "/apps/enableit/portal/enableportal-dev", "4010", "5" ] ]
+CMD python jmxmarathondataaggregator.py ${MARATHON_URL} ${APP_ID} ${MAX_SCALED_INSTANCES}
