@@ -36,5 +36,5 @@ The run command is as follows:
 You'll need to open ports equal to the total number of scaled instances.
 
 ## TODO
-- Hold old data in memory to avoid having to wait for retrieval
-- Pretty print JSON so endpoints are readable
+- Hold old data in memory to avoid having to wait for retrieval between reloads
+- Pretty print JSON so endpoints are readable (if JSON is used)
