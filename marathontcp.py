@@ -25,9 +25,16 @@ class MarathonRedirectTCPHandler(socketserver.BaseRequestHandler):
     """ Makes a metrics request and forwards to preset ports through the application"""
     
     def handle(self):
+        print("Retrieving metrics from http://" + self.server.api_url + "/metrics")
         # Make a request to the api_url metrics and fwd to page
         encoded_response = urllib.request.urlopen("http://" + self.server.api_url + "/metrics")
-        
+
+        # Change encoded response in to simple string
+        text_response = encoded_response.read().decode()
+
         # self.request is the TCP socket connected to the client
-        self.request.sendall(encoded_response.read())
-        
+        self.request.sendall(text_response.encode())
+
+        # Read Response to close request
+        res = self.request.recv(1024)
+
