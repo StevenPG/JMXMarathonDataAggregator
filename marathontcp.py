@@ -30,7 +30,9 @@ class MarathonRedirectTCPHandler(socketserver.BaseRequestHandler):
         encoded_response = urllib.request.urlopen("http://" + self.server.api_url + "/metrics")
 
         # Change encoded response in to simple string
-        text_response = encoded_response.read().decode()
+        header = "HTTP/1.0 200 OK \r\n"
+        content_type = "Content-Type: text/plain\r\n\r\n"
+        text_response = header + content_type + encoded_response.read().decode()
 
         # self.request is the TCP socket connected to the client
         self.request.sendall(text_response.encode())
