@@ -27,7 +27,7 @@ class MarathonRestService:
         self.totalScaledInstances = response_as_json['app']['instances']
         self.fullEndpointList = response_as_json['app']['tasks']
         
-        # NOTE, CURRENTLY THE FIRST PORT IS CHOSEN AS THE JAVA EXPOSED PORT
+        # NOTE, CURRENTLY THE SECOND PORT IS CHOSEN AS THE JMX EXPOSED PORT
         self.endpointList = []
         for endpoint in list(self.fullEndpointList):
             self.endpointList.append(endpoint['host'] + ":" + str(endpoint['ports'][1]))    

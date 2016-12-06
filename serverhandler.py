@@ -19,10 +19,11 @@ from marathontcp import MarathonRedirectTCPHandler
 class ServerHandler:
     """ Handles spinning up multiple socker servers on httpserver to listen for requests """
 
-    def __init__(self, inputArgs, marathon_service):
+    def __init__(self, inputArgs, marathon_service, metrics):
         """ Takes a CommandLineArguments object as input """
         self.inputArgs = inputArgs # Save CLA internally
         self.startingport = 4000 # Set default port
+        self.metrics = metrics # Add metrics object
         self.marathon_service = marathon_service # get marathon data values
         self.__buildUsingValues()
         self.Handler = http.server.SimpleHTTPRequestHandler
@@ -40,10 +41,14 @@ class ServerHandler:
             try:
                 httpd = MarathonRedirectTCPServer(("0.0.0.0", port),
                                               MarathonRedirectTCPHandler, api_url=self.marathon_service.endpointList[index])
+
+                # Add server to list of live endpoints
+                self.metrics.add_server(self.marathon_service.endpointList[index])
+
                 self.threadList.append(Thread(target=httpd.serve_forever))
                 index = index + 1 # Iterate endpoint index
             except IndexError:
-                print("Attempted to create thread with no endpoint mapping.\n Thread " + str(index+1) + " creation denied.")
+                print("Attempted to create thread with no live endpoint mapping.\n Thread " + str(index+1) + " creation denied.")
                 index = index + 1
 
     def startSocketServers(self):

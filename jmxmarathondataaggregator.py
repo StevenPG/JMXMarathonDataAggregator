@@ -31,6 +31,8 @@ import sys                        # Command line arguments
 from commandlineargumentshandler import CommandLineArgumentsHandler
 from marathonrestservice import MarathonRestService
 from serverhandler import ServerHandler
+from expose_metrics import MetricsHandler
+from metrics_obj import Metrics
 
 def usageCheck():
     """ Run at the start of the application for verify structure """
@@ -47,8 +49,10 @@ def usageCheck():
 
 usageCheck()                                                         # Verify correct inputs entered
 inputArgs = CommandLineArgumentsHandler(sys.argv)                    # Retrieve command line arguments
+metrics = Metrics()
 client = MarathonRestService(inputArgs.marathonURL, inputArgs.appid) # build marathon service
-server = ServerHandler(inputArgs, client)                            # build initial server handler
+server = ServerHandler(inputArgs, client, metrics)                   # build initial server handler
+handler = MetricsHandler(metrics)                                       # Start up metrics endpoint
 server.startSocketServers()                                          # Kick off socket servers
 
 """
